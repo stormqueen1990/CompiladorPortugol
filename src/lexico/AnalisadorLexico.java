@@ -7,14 +7,13 @@ import java.util.regex.Pattern;
 
 import lexico.exception.LexemaNaoReconhecidoException;
 
-
 /**
  * Realiza os passos da análise léxica do arquivo-fonte.
  * 
  * @author mauren
  */
 public class AnalisadorLexico implements TiposToken {
-	private String simbolos = "([-\\+\\^\\*/\\\\%=<>,\\[\\]\\(\\):\"]|(<-)|(<=)|(>=)|(<>)|(//)|(\\.\\.))+";
+	private String simbolos = "([-\\+\\^\\*/\\\\%=<>,\\[\\]\\(\\):]|(<-)|(<=)|(>=)|(<>)|(//)|(\\.\\.))+";
 	private String string = "(\\\"[^\"]+\\\")";
 	private String identificadores = "[a-zA-Z_]+";
 	private String numerais = "([0-9]+(\\.[0-9]+)?)";
@@ -41,7 +40,7 @@ public class AnalisadorLexico implements TiposToken {
 	 * @throws LexemaNaoReconhecidoException
 	 *             quando há algum lexema não permitido pela linguagem na linha em questão
 	 */
-	public void analisa(Linha linha) throws LexemaNaoReconhecidoException {
+	public boolean analisa(Linha linha) throws LexemaNaoReconhecidoException {
 		String str = linha.getConteudo();
 		Matcher lexico = this.padraoLexico.matcher(str);
 		List<String> listaPartes = new LinkedList<String>();
@@ -59,5 +58,7 @@ public class AnalisadorLexico implements TiposToken {
 			parte = str.substring(lexico.start(), fim);
 			listaPartes.add(parte);
 		}
+		
+		return true;
 	}
 }
