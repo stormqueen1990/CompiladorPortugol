@@ -1,6 +1,6 @@
 package geral;
 
-import lexico.TiposToken;
+import geral.enumeration.TiposTokenEnum;
 
 /**
  * Abstração do token da linguagem.
@@ -9,7 +9,7 @@ import lexico.TiposToken;
  */
 public class Token {
 	private String texto;
-	private TiposToken tipo;
+	private TiposTokenEnum tipo;
 	
 	/**
 	 * @return texto correspondente a esse token.
@@ -25,11 +25,11 @@ public class Token {
 	/**
 	 * @return tipo do token em questão.
 	 */
-	public TiposToken getTipo() {
+	public TiposTokenEnum getTipo() {
 		return this.tipo;
 	}
 	
-	public void setTipo(TiposToken tipo) {
+	public void setTipo(TiposTokenEnum tipo) {
 		this.tipo = tipo;
 	}
 }
