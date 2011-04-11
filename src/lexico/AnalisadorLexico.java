@@ -26,8 +26,13 @@ public class AnalisadorLexico {
 	private final String comentario = "(//[^\\n]+)";
 	private final String identificadores = "([a-zA-Z_]+[0-9]*[a-zA-Z_]*)";
 	private final String numerais = "([0-9]+(\\.[0-9]+)?)";
+	
+	private final String operadorAtribuicao = "<-";
+	private final List<String> operadoresAritmeticos = new ArrayList<String>();
 	private final List<String> operadoresLogicos = new ArrayList<String>();
+	private final List<String> operadoresRelacionais = new ArrayList<String>();
 	private final List<String> palavrasReservadas = new ArrayList<String>();
+	
 	private Pattern padraoLexico;
 	
 	private List<Token> listaTokens = new ArrayList<Token>();
@@ -55,9 +60,24 @@ public class AnalisadorLexico {
 	 * Preenche a lista de palavras reservadas.
 	 */
 	private void preencheListas() {
+		// Preenche a lista de operadores aritméticos
+		this.operadoresAritmeticos.add("+");
+		this.operadoresAritmeticos.add("-");
+		this.operadoresAritmeticos.add("*");
+		this.operadoresAritmeticos.add("\\");
+		this.operadoresAritmeticos.add("/");
+		this.operadoresAritmeticos.add("^");
+		this.operadoresAritmeticos.add("%");
 		// Preenche a lista de operadores lógicos
 		this.operadoresLogicos.add("e");
 		this.operadoresLogicos.add("ou");
+		// Preenche a lista de operadores relacionais
+		this.operadoresRelacionais.add("=");
+		this.operadoresRelacionais.add("<");
+		this.operadoresRelacionais.add(">");
+		this.operadoresRelacionais.add("<=");
+		this.operadoresRelacionais.add(">=");
+		this.operadoresRelacionais.add("<>");
 		// Preenche a lista de palavras reservadas
 		this.palavrasReservadas.add("algoritmo");
 		this.palavrasReservadas.add("var");
@@ -167,7 +187,7 @@ public class AnalisadorLexico {
 		
 		if (matcher.matches()) {
 			if (this.operadoresLogicos.contains(lexema)) {
-				return TiposTokenEnum.OPERADOR;
+				return TiposTokenEnum.OPERADOR_ARITMETICO;
 			} else if (this.palavrasReservadas.contains(lexema)) {
 				return TiposTokenEnum.PALAVRA_RESERVADA;
 			} else {
@@ -178,13 +198,31 @@ public class AnalisadorLexico {
 		matcher = matcher.usePattern(Pattern.compile(this.operadores));
 		
 		if (matcher.matches()) {
-			return TiposTokenEnum.OPERADOR;
+			if (lexema.equals(this.operadorAtribuicao)) {
+				return TiposTokenEnum.OPERADOR_ATRIBUICAO;
+			} else if (this.operadoresAritmeticos.contains(lexema)) {
+				return TiposTokenEnum.OPERADOR_ARITMETICO;
+			} else if (this.operadoresRelacionais.contains(lexema)) {
+				return TiposTokenEnum.OPERADOR_RELACIONAL;
+			}
+			
+			return null;
 		}
 		
-		matcher = matcher.usePattern(Pattern.compile(this.numerais + "|" + this.string));
+		matcher = matcher.usePattern(Pattern.compile(this.numerais));
 		
 		if (matcher.matches()) {
-			return TiposTokenEnum.CONSTANTE;
+			if (lexema.indexOf('.') >= 0) {
+				return TiposTokenEnum.CONSTANTE_REAL;
+			} else {
+				return TiposTokenEnum.CONSTANTE_INTEIRA;
+			}
+		}
+		
+		matcher = matcher.usePattern(Pattern.compile(this.string));
+		
+		if (matcher.matches()) {
+			return TiposTokenEnum.CONSTANTE_LITERAL;
 		}
 		
 		return null;

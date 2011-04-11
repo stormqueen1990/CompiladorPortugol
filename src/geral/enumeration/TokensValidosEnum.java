@@ -93,8 +93,8 @@ public enum TokensValidosEnum {
 	/**
 	 * String entre aspas
 	 */
-	TK_String(23, TiposTokenEnum.CONSTANTE.getDescricao()),
-	TK_Const_int(24, TiposTokenEnum.CONSTANTE.getDescricao()),
+	TK_String(23, TiposTokenEnum.CONSTANTE_INTEIRA.getDescricao()),
+	TK_Const_int(24, TiposTokenEnum.CONSTANTE_INTEIRA.getDescricao()),
 	/**
 	 * Identificador
 	 */
@@ -110,31 +110,31 @@ public enum TokensValidosEnum {
 	/**
 	 * <-
 	 */
-	TK_Atrib(28, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Atrib(28, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * *
 	 */
-	TK_Mult(29, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Mult(29, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * +
 	 */
-	TK_Mais(30, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Mais(30, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * -
 	 */
-	TK_Menos(31, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Menos(31, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * /
 	 */
-	TK_Divide(32, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Divide(32, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * \
 	 */
-	TK_DivInt(33, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_DivInt(33, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * %
 	 */
-	TK_Resto(34, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Resto(34, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * (
 	 */
@@ -146,35 +146,35 @@ public enum TokensValidosEnum {
 	/**
 	 * <
 	 */
-	TK_Menor(37, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Menor(37, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * >
 	 */
-	TK_Maior(38, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Maior(38, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * E
 	 */
-	TK_E(39, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_E(39, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * OU
 	 */
-	TK_OU(40, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_OU(40, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * =
 	 */
-	TK_Igual(41, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Igual(41, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * <=
 	 */
-	TK_MenorIgual(42, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_MenorIgual(42, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * >=
 	 */
-	TK_MaiorIgual(43, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_MaiorIgual(43, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * <>
 	 */
-	TK_Diferente(44, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Diferente(44, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * ?
 	 */
@@ -202,11 +202,11 @@ public enum TokensValidosEnum {
 	/**
 	 * ^
 	 */
-	TK_Potenciacao(52, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_Potenciacao(52, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * constante real
 	 */
-	TK_Const_real(53, TiposTokenEnum.CONSTANTE.getDescricao()),
+	TK_Const_real(53, TiposTokenEnum.CONSTANTE_INTEIRA.getDescricao()),
 	/**
 	 * 'Escreval'
 	 */
@@ -222,7 +222,7 @@ public enum TokensValidosEnum {
 	/**
 	 * 
 	 */
-	TK_NAO(63, TiposTokenEnum.OPERADOR.getDescricao()),
+	TK_NAO(63, TiposTokenEnum.OPERADOR_ARITMETICO.getDescricao()),
 	/**
 	 * 'Passo'
 	 */

@@ -35,6 +35,6 @@ public class Token {
 	
 	@Override
 	public String toString() {
-		return this.texto + " - " + this.getTipo().getDescricao();
+		return this.texto + " - " + this.getTipo();
 	}
 }
