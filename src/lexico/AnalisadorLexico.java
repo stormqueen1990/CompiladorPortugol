@@ -20,29 +20,32 @@ import lexico.exception.LexemaNaoReconhecidoException;
  * @author mauren
  */
 public class AnalisadorLexico {
-	private String operadores = "([-\\+\\^\\*/\\\\%=<>]|(<-)|(<=)|(>=)|(<>))+";
-	private String delimitadores = "([,\\[\\]\\(\\):]|(\\.\\.))+";
-	private String string = "(\\\"[^\"]+\\\")";
-	private String comentario = "(//[^\\n]+)";
-	private String identificadores = "[a-zA-Z_]+[0-9]+[a-zA-Z_]*";
-	private String numerais = "([0-9]+(\\.[0-9]+)?)";
-	private List<String> operadoresLogicos = new ArrayList<String>();
-	private List<String> palavrasReservadas = new ArrayList<String>();
+	private final String operadores = "(([-\\+\\^\\*/\\\\%=<>]|(<-)|(<=)|(>=)|(<>))+)";
+	private final String delimitadores = "(([,\\[\\]\\(\\):]|(\\.\\.))+)";
+	private final String string = "(\"[^\"]+\")";
+	private final String comentario = "(//[^\\n]+)";
+	private final String identificadores = "([a-zA-Z_]+[0-9]*[a-zA-Z_]*)";
+	private final String numerais = "([0-9]+(\\.[0-9]+)?)";
+	private final List<String> operadoresLogicos = new ArrayList<String>();
+	private final List<String> palavrasReservadas = new ArrayList<String>();
 	private Pattern padraoLexico;
 	
 	private List<Token> listaTokens = new ArrayList<Token>();
 	
 	public AnalisadorLexico() {
 		StringBuilder padrao = new StringBuilder(100);
-		final String[] padroes = new String[] { this.operadores, this.delimitadores, this.string, this.comentario,
-				this.identificadores, this.numerais };
+		final String[] padroes = new String[] { this.identificadores, this.numerais, this.string, this.comentario,
+				this.operadores, this.delimitadores };
 		
 		for (int i = 0; i < padroes.length; i++) {
 			padrao.append(padroes[i]);
-			padrao.append("|");
+			
+			if (i != padroes.length - 1) {
+				padrao.append("|");
+			}
 		}
 		
-		padrao.setCharAt(padrao.length() - 1, '\0');
+		padrao.append("+?");
 		this.padraoLexico = Pattern.compile(padrao.toString());
 		
 		this.preencheListas();
@@ -97,14 +100,12 @@ public class AnalisadorLexico {
 		Matcher lexico = this.padraoLexico.matcher(str);
 		int fim = 0;
 		
-		// lexico.
-		
 		// Enquanto houver lexema na linha
 		while (lexico.find()) {
 			String parte;
 			
 			// Verifica se algum pedaço não foi identificado
-			if ((fim != lexico.start()) && !str.substring(fim, lexico.start()).trim().isEmpty()) {
+			if ((fim != lexico.start()) && !str.substring(fim, lexico.start() - 1).trim().isEmpty()) {
 				throw new LexemaNaoReconhecidoException(linha.getNumero(), fim + 1);
 			}
 			
@@ -133,8 +134,10 @@ public class AnalisadorLexico {
 		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(new File(nomeArqSaida)));
 		
 		for (Token tk : this.listaTokens) {
-			fileWriter.write("(" + tk.getTexto() + " - " + tk.getTipo().getDescricao() + ")");
+			fileWriter.write(tk + "\n");
 		}
+		
+		fileWriter.close();
 		
 		return true;
 	}

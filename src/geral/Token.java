@@ -32,4 +32,9 @@ public class Token {
 	public void setTipo(TiposTokenEnum tipo) {
 		this.tipo = tipo;
 	}
+	
+	@Override
+	public String toString() {
+		return this.texto + " - " + this.getTipo().getDescricao();
+	}
 }
