@@ -1,7 +1,7 @@
 package lexico;
 
 import geral.Token;
-import geral.enumeration.TiposTokenEnum;
+import geral.enumeration.TokenEnum;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,28 +20,27 @@ import lexico.exception.LexemaNaoReconhecidoException;
  * @author mauren
  */
 public class AnalisadorLexico {
-	private final String operadores = "(([-\\+\\^\\*/\\\\%=<>]|(<-)|(<=)|(>=)|(<>))+)";
-	private final String delimitadores = "(([,\\[\\]\\(\\):]|(\\.\\.))+)";
+	private final String operadores = "((<-)|(<=)|(>=)|(<>)|[-\\+\\^\\*/\\\\%=<>])";
+	private final String delimitadores = "([,;\\[\\]\\(\\):]|(\\.\\.))";
 	private final String string = "(\"[^\"]+\")";
-	private final String comentario = "(//[^\\n]+)";
-	private final String identificadores = "([a-zA-Z_]+[0-9]*[a-zA-Z_]*)";
+	private final String comentario = "(//[^\\n]*)";
+	private final String identificadores = "([a-zA-Z]+[0-9]*[a-zA-Z]*)";
 	private final String numerais = "([0-9]+(\\.[0-9]+)?)";
-	
-	private final String operadorAtribuicao = "<-";
-	private final List<String> operadoresAritmeticos = new ArrayList<String>();
-	private final List<String> operadoresLogicos = new ArrayList<String>();
-	private final List<String> operadoresRelacionais = new ArrayList<String>();
-	private final List<String> palavrasReservadas = new ArrayList<String>();
 	
 	private Pattern padraoLexico;
 	
 	private List<Token> listaTokens = new ArrayList<Token>();
 	
+	/**
+	 * Construtor-padrão.
+	 */
 	public AnalisadorLexico() {
+		// Monta a regex com todos os casos possíveis de busca
 		StringBuilder padrao = new StringBuilder(100);
 		final String[] padroes = new String[] { this.identificadores, this.numerais, this.string, this.comentario,
 				this.operadores, this.delimitadores };
 		
+		// Junta elas em um stringão
 		for (int i = 0; i < padroes.length; i++) {
 			padrao.append(padroes[i]);
 			
@@ -51,60 +50,8 @@ public class AnalisadorLexico {
 		}
 		
 		padrao.append("+?");
+		// Monta o padrão
 		this.padraoLexico = Pattern.compile(padrao.toString());
-		
-		this.preencheListas();
-	}
-	
-	/**
-	 * Preenche a lista de palavras reservadas.
-	 */
-	private void preencheListas() {
-		// Preenche a lista de operadores aritméticos
-		this.operadoresAritmeticos.add("+");
-		this.operadoresAritmeticos.add("-");
-		this.operadoresAritmeticos.add("*");
-		this.operadoresAritmeticos.add("\\");
-		this.operadoresAritmeticos.add("/");
-		this.operadoresAritmeticos.add("^");
-		this.operadoresAritmeticos.add("%");
-		// Preenche a lista de operadores lógicos
-		this.operadoresLogicos.add("e");
-		this.operadoresLogicos.add("ou");
-		// Preenche a lista de operadores relacionais
-		this.operadoresRelacionais.add("=");
-		this.operadoresRelacionais.add("<");
-		this.operadoresRelacionais.add(">");
-		this.operadoresRelacionais.add("<=");
-		this.operadoresRelacionais.add(">=");
-		this.operadoresRelacionais.add("<>");
-		// Preenche a lista de palavras reservadas
-		this.palavrasReservadas.add("algoritmo");
-		this.palavrasReservadas.add("var");
-		this.palavrasReservadas.add("inicio");
-		this.palavrasReservadas.add("fimalgoritmo");
-		this.palavrasReservadas.add("para");
-		this.palavrasReservadas.add("de");
-		this.palavrasReservadas.add("ate");
-		this.palavrasReservadas.add("faca");
-		this.palavrasReservadas.add("fimpara");
-		this.palavrasReservadas.add("repita");
-		this.palavrasReservadas.add("enquanto");
-		this.palavrasReservadas.add("fimenquanto");
-		this.palavrasReservadas.add("se");
-		this.palavrasReservadas.add("entao");
-		this.palavrasReservadas.add("senao");
-		this.palavrasReservadas.add("fimse");
-		this.palavrasReservadas.add("escreva");
-		this.palavrasReservadas.add("leia");
-		this.palavrasReservadas.add("inteiro");
-		this.palavrasReservadas.add("real");
-		this.palavrasReservadas.add("vetor");
-		this.palavrasReservadas.add("logico");
-		this.palavrasReservadas.add("escreval");
-		this.palavrasReservadas.add("falso");
-		this.palavrasReservadas.add("verdadeiro");
-		this.palavrasReservadas.add("passo");
 	}
 	
 	/**
@@ -126,16 +73,29 @@ public class AnalisadorLexico {
 			
 			// Verifica se algum pedaço não foi identificado
 			if ((fim != lexico.start()) && !str.substring(fim, lexico.start() - 1).trim().isEmpty()) {
-				throw new LexemaNaoReconhecidoException(linha.getNumero(), fim + 1);
+				String comp = str.substring(fim + 1, lexico.start() - 1);
+				throw new LexemaNaoReconhecidoException(linha.getNumero(), fim + 1, comp);
 			}
 			
+			// Captura o final do lexema
 			fim = lexico.end();
-			
+			// Substringa o lexema
 			parte = str.substring(lexico.start(), fim);
 			
+			// Cria um token a partir do lexema
 			Token token = new Token();
 			token.setTexto(parte);
-			token.setTipo(this.buscaTipoToken(parte));
+			
+			TokenEnum tipoToken = this.buscaTipoToken(parte);
+			
+			// Se não encontrou tipo válido para o lexema, lança exceção
+			if (tipoToken == null) {
+				throw new LexemaNaoReconhecidoException(linha.getNumero(), fim, parte);
+			} else {
+				token.setTipo(tipoToken);
+			}
+			
+			// Adiciona à lista de tokens
 			this.listaTokens.add(token);
 		}
 		
@@ -163,66 +123,41 @@ public class AnalisadorLexico {
 	}
 	
 	/**
-	 * Verifica qual o tipo de token do lexema encontrado.
+	 * Busca o tipo do lexema recebido por parâmetro.
 	 * 
 	 * @param lexema
-	 *            o lexema encontrado.
-	 * @return o tipo de token identificado.
+	 *            o lexema cujo tipo deve ser buscado.
+	 * @return o tipo do lexema quando encontrado, null caso contrário.
 	 */
-	private TiposTokenEnum buscaTipoToken(String lexema) {
-		Pattern pat = Pattern.compile(this.comentario);
-		Matcher matcher = pat.matcher(lexema);
-		
-		if (matcher.matches()) {
-			return TiposTokenEnum.COMENTARIO;
-		}
-		
-		matcher = matcher.usePattern(Pattern.compile(this.delimitadores));
-		
-		if (matcher.matches()) {
-			return TiposTokenEnum.DELIMITADOR;
-		}
-		
-		matcher = matcher.usePattern(Pattern.compile(this.identificadores));
-		
-		if (matcher.matches()) {
-			if (this.operadoresLogicos.contains(lexema)) {
-				return TiposTokenEnum.OPERADOR_ARITMETICO;
-			} else if (this.palavrasReservadas.contains(lexema)) {
-				return TiposTokenEnum.PALAVRA_RESERVADA;
+	private TokenEnum buscaTipoToken(String lexema) {
+		// Verifica se passa na regex de comentário
+		if (lexema.matches(this.comentario)) {
+			return TokenEnum.TK_Coment;
+		} // Verifica se passa na regex de numerais
+		else if (lexema.matches(this.numerais)) {
+			// Se passou, verifica que tipo de número é
+			if (lexema.indexOf('.') == -1) {
+				return TokenEnum.TK_Const_int;
 			} else {
-				return TiposTokenEnum.IDENTIFICADOR;
+				return TokenEnum.TK_Const_real;
+			}
+		} // Verifica se é uma string
+		else if (lexema.matches(this.string)) {
+			return TokenEnum.TK_String;
+		}
+		
+		TokenEnum[] valores = TokenEnum.values();
+		
+		// Varre o vetor buscando pelo seu tipo
+		for (TokenEnum tk : valores) {
+			if (tk.getDesLexema().equalsIgnoreCase(lexema)) {
+				return tk;
 			}
 		}
 		
-		matcher = matcher.usePattern(Pattern.compile(this.operadores));
-		
-		if (matcher.matches()) {
-			if (lexema.equals(this.operadorAtribuicao)) {
-				return TiposTokenEnum.OPERADOR_ATRIBUICAO;
-			} else if (this.operadoresAritmeticos.contains(lexema)) {
-				return TiposTokenEnum.OPERADOR_ARITMETICO;
-			} else if (this.operadoresRelacionais.contains(lexema)) {
-				return TiposTokenEnum.OPERADOR_RELACIONAL;
-			}
-			
-			return null;
-		}
-		
-		matcher = matcher.usePattern(Pattern.compile(this.numerais));
-		
-		if (matcher.matches()) {
-			if (lexema.indexOf('.') >= 0) {
-				return TiposTokenEnum.CONSTANTE_REAL;
-			} else {
-				return TiposTokenEnum.CONSTANTE_INTEIRA;
-			}
-		}
-		
-		matcher = matcher.usePattern(Pattern.compile(this.string));
-		
-		if (matcher.matches()) {
-			return TiposTokenEnum.CONSTANTE_LITERAL;
+		// Se não encontrou o tipo, verifica se é identificador
+		if (lexema.matches(this.identificadores)) {
+			return TokenEnum.TK_Ident;
 		}
 		
 		return null;

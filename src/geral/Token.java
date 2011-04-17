@@ -1,6 +1,6 @@
 package geral;
 
-import geral.enumeration.TiposTokenEnum;
+import geral.enumeration.TokenEnum;
 
 /**
  * Abstração do token da linguagem.
@@ -9,7 +9,7 @@ import geral.enumeration.TiposTokenEnum;
  */
 public class Token {
 	private String texto;
-	private TiposTokenEnum tipo;
+	private TokenEnum tipo;
 	
 	/**
 	 * @return texto correspondente a esse token.
@@ -25,11 +25,11 @@ public class Token {
 	/**
 	 * @return tipo do token em questão.
 	 */
-	public TiposTokenEnum getTipo() {
+	public TokenEnum getTipo() {
 		return this.tipo;
 	}
 	
-	public void setTipo(TiposTokenEnum tipo) {
+	public void setTipo(TokenEnum tipo) {
 		this.tipo = tipo;
 	}
 	
