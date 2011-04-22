@@ -85,6 +85,7 @@ public class AnalisadorLexico {
 			// Cria um token a partir do lexema
 			Token token = new Token();
 			token.setTexto(parte);
+			token.setLinha(linha.getNumero());
 			
 			TokenEnum tipoToken = this.buscaTipoToken(parte);
 			

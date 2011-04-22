@@ -1,7 +1,7 @@
 package lexico.exception;
 
 /**
- * Exceção lançada quando o lexema não foi reconhecido pelas regexes.
+ * Exceção lançada quando o lexema não foi reconhecido pelo analisador léxico.
  * 
  * @author mauren
  */

@@ -9,6 +9,7 @@ import geral.enumeration.TokenEnum;
  */
 public class Token {
 	private String texto;
+	private Integer linha;
 	private TokenEnum tipo;
 	
 	/**
@@ -20,6 +21,17 @@ public class Token {
 	
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+	
+	/**
+	 * @return número da linha em que esse token se encontra.
+	 */
+	public Integer getLinha() {
+		return this.linha;
+	}
+	
+	public void setLinha(Integer linha) {
+		this.linha = linha;
 	}
 	
 	/**
