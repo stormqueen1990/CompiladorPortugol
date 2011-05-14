@@ -46,6 +46,29 @@ public class AnalisadorSintatico {
 			if (tk.getTipo() == TokenEnum.TK_String) {
 				tk = this.listaTokens.next();
 			}
+			
+			//Verifica a existência de declarações de variáveis (opcional)
+			if (tk.getTipo() == TokenEnum.TK_Var){
+				tk = this.listaTokens.next();
+			}			
+			
+			//Verifica a existência da palavra-chave Inico
+			if (tk.getTipo() == TokenEnum.TK_Inicio){
+				tk = this.listaTokens.next();
+				
+				//TODO Colocar verificação de comandos
+				
+				//Verifica a existência da palavra-chave FimAlgortimo
+				if (tk.getTipo() == TokenEnum.TK_Fim_Alg){
+					tk = this.listaTokens.next();
+				}
+				else{
+					throw new SintaxeException(ErroSintaxeEnum.PALAVRA_FIMALGORITMO_NAO_ENCONTRADA, tk);
+				}
+			}			
+			else{
+				throw new SintaxeException(ErroSintaxeEnum.PALAVRA_INICIO_NAO_ENCONTRADA, tk);
+			}			
 		} else {
 			throw new SintaxeException(ErroSintaxeEnum.PALAVRA_ALGORITMO_NAO_ENCONTRADA, tk);
 		}

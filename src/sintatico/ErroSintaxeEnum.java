@@ -6,7 +6,10 @@ package sintatico;
  * @author mauren
  */
 public enum ErroSintaxeEnum {
-	PALAVRA_ALGORITMO_NAO_ENCONTRADA(1, "Palavra-chave \'Algoritmo\' não encontrada.");
+	PALAVRA_ALGORITMO_NAO_ENCONTRADA(1, "Palavra-chave \'Algoritmo\' não encontrada."),
+	PALAVRA_INICIO_NAO_ENCONTRADA(2, "Palavra-chave \'Inicio\' não encontrada."),
+	PALAVRA_FIMALGORITMO_NAO_ENCONTRADA(3, "Palavra-chave \'Fimalgoritmo\' não encontrada.");
+	
 	
 	private Integer codMsg;
 	private String textoMsg;
