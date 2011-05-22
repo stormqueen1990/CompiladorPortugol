@@ -10,7 +10,10 @@ public enum ErroSintaxeEnum {
 	PALAVRA_INICIO_NAO_ENCONTRADA(2, "Palavra-chave \'Inicio\' não encontrada."),
 	PALAVRA_FIMALGORITMO_NAO_ENCONTRADA(3, "Palavra-chave \'Fimalgoritmo\' não encontrada."),
 	PALAVRA_REPITA_NAO_ENCONTRADA(4, "Palavra-chave \'Repita\' não encontrada."),
-	PALAVRA_ATE_NAO_ENCONTRADA(5, "Palavra-chave \'Ate\' não encontrada.");
+	PALAVRA_ATE_NAO_ENCONTRADA(5, "Palavra-chave \'Ate\' não encontrada."),
+	PALAVRA_SE_NAO_ENCONTRADA(6, "Palavra-chave \'Se\' não encontrada."),
+	PALAVRA_ENTAO_NAO_ENCONTRADA(7, "Palavra-chave \'Entao\' não encontrada."),
+	PALAVRA_FIMSE_NAO_ENCONTRADA(8, "Palavra-chave \'Fimse\' não encontrada.");
 	
 	
 	private Integer codMsg;
