@@ -2,6 +2,7 @@ package sintatico.construcoes.base;
 
 import geral.AdvArrayList;
 import geral.Token;
+import semantico.tabsimb.TabelaSimbolos;
 import sintatico.exception.SintaxeException;
 
 /**
@@ -10,6 +11,12 @@ import sintatico.exception.SintaxeException;
  * @author mauren
  */
 public abstract class ConstrucaoBase {
+	protected static TabelaSimbolos tabelaSimbolos;
+
+	static {
+		tabelaSimbolos = new TabelaSimbolos();
+	}
+
 	/**
 	 * Realiza a análise sintática da construção.
 	 * 

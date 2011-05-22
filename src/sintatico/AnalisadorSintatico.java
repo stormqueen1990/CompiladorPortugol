@@ -11,15 +11,15 @@ import sintatico.exception.SintaxeException;
  * @author mauren
  */
 public class AnalisadorSintatico {
-	private AdvArrayList<Token> listaTokens;
-	
+	private final AdvArrayList<Token> listaTokens;
+
 	/**
 	 * Evita a supressão do construtor-padrão.
 	 */
 	public AnalisadorSintatico() {
 		this.listaTokens = new AdvArrayList<Token>();
 	}
-	
+
 	/**
 	 * Construtor.
 	 * 
@@ -29,7 +29,7 @@ public class AnalisadorSintatico {
 	public AnalisadorSintatico(AdvArrayList<Token> listaTokens) {
 		this.listaTokens = listaTokens;
 	}
-	
+
 	/**
 	 * Realiza a análise sintática do arquivo-fonte.
 	 * 
@@ -37,42 +37,40 @@ public class AnalisadorSintatico {
 	 */
 	public boolean analisa() throws SintaxeException {
 		Token tk = this.listaTokens.next();
-		
+
 		// Verifica se inicia pela palavra-chave Algoritmo
 		if (tk.getTipo() == TokenEnum.TK_Algoritmo) {
 			tk = this.listaTokens.next();
-			
+
 			// Verifica a existência de uma string com o nome do algoritmo (opcional)
 			if (tk.getTipo() == TokenEnum.TK_String) {
 				tk = this.listaTokens.next();
 			}
-			
-			//Verifica a existência de declarações de variáveis (opcional)
-			if (tk.getTipo() == TokenEnum.TK_Var){
+
+			// Verifica a existência de declarações de variáveis (opcional)
+			if (tk.getTipo() == TokenEnum.TK_Var) {
 				tk = this.listaTokens.next();
-			}			
-			
-			//Verifica a existência da palavra-chave Inico
-			if (tk.getTipo() == TokenEnum.TK_Inicio){
+			}
+
+			// Verifica a existência da palavra-chave Inico
+			if (tk.getTipo() == TokenEnum.TK_Inicio) {
 				tk = this.listaTokens.next();
-				
-				//TODO Colocar verificação de comandos
-				
-				//Verifica a existência da palavra-chave FimAlgortimo
-				if (tk.getTipo() == TokenEnum.TK_Fim_Alg){
+
+				// TODO Colocar verificação de comandos
+
+				// Verifica a existência da palavra-chave FimAlgortimo
+				if (tk.getTipo() == TokenEnum.TK_Fim_Alg) {
 					tk = this.listaTokens.next();
-				}
-				else{
+				} else {
 					throw new SintaxeException(ErroSintaxeEnum.PALAVRA_FIMALGORITMO_NAO_ENCONTRADA, tk);
 				}
-			}			
-			else{
+			} else {
 				throw new SintaxeException(ErroSintaxeEnum.PALAVRA_INICIO_NAO_ENCONTRADA, tk);
-			}			
+			}
 		} else {
 			throw new SintaxeException(ErroSintaxeEnum.PALAVRA_ALGORITMO_NAO_ENCONTRADA, tk);
 		}
-		
+
 		return true;
 	}
 }
