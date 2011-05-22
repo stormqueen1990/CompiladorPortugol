@@ -8,7 +8,7 @@ import sintatico.construcoes.base.ConstrucaoBase;
 import sintatico.exception.SintaxeException;
 
 /**
- * @author fernando
+ * @author Fernando Melo
  */
 public class RepitaAnalisador extends ConstrucaoBase {
 
